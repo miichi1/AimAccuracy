@@ -124,12 +124,15 @@ function spawnCircle() {
   }, settings[difficulty].time);
 }
 
-// miss click
 document.getElementById("game").addEventListener("click", (e) => {
   if (!gameRunning || paused) return;
+
   if (!e.target.classList.contains("circle")) {
-    miss++;
-    updateUI();
+    // ONLY count if NO circle exists
+    if (!document.querySelector(".circle")) {
+      miss++;
+      updateUI();
+    }
   }
 });
 
