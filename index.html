@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Circle Click Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="menu">
+  <h1>Circle Game</h1>
+  <button onclick="startGame()">Start</button>
+  <button onclick="showScoreboard()">Scoreboard</button>
+</div>
+
+<div id="game" class="hidden">
+  <p>Score: <span id="score">0</span></p>
+  <p>Miss: <span id="miss">0</span></p>
+  <p>Accuracy: <span id="accuracy">0%</span></p>
+  <div id="gameArea"></div>
+</div>
+
+<div id="scoreboard" class="hidden">
+  <h2>Scoreboard</h2>
+  <ul id="scoreList"></ul>
+  <button onclick="goMenu()">Back</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
