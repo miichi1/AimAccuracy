@@ -76,7 +76,8 @@ function gameLoop() {
 function spawnCircle() {
   const game = document.getElementById("game");
 
-  const oldCircle = document.querySelector(".circle");
+  // ✅ ONLY remove inside game
+  const oldCircle = game.querySelector(".circle");
   if (oldCircle) oldCircle.remove();
 
   const circle = document.createElement("div");
@@ -111,22 +112,25 @@ function spawnCircle() {
       circle.remove();
 
       clearTimeout(lifeTimeout);
-      clearTimeout(spawnTimeout);
 
-      spawnTimeout = setTimeout(gameLoop, settings[difficulty].cooldown);
+      // ✅ ALWAYS continue loop
+      spawnTimeout = setTimeout(() => gameLoop(), settings[difficulty].cooldown);
     }
   };
 
   game.appendChild(circle);
 
+  // ⏱ lifetime
   lifeTimeout = setTimeout(() => {
     if (!clicked) {
       miss++;
       updateUI();
       circle.remove();
-
-      spawnTimeout = setTimeout(gameLoop, settings[difficulty].cooldown);
     }
+
+    // ✅ ALWAYS continue loop (important fix)
+    spawnTimeout = setTimeout(() => gameLoop(), settings[difficulty].cooldown);
+
   }, settings[difficulty].time);
 }
 
