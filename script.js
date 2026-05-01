@@ -74,7 +74,8 @@ function spawnCircle() {
 
     // 🔊 PLAY SOUND
     clickSound.currentTime = 0;
-    clickSound.play();
+    clickSound.currentTime = 0;
+    clickSound.play().catch(err => console.log("Sound blocked:", err));
 
     score += settings[difficulty].points;
     updateUI();
