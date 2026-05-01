@@ -61,6 +61,14 @@ window.startGame = function(diff) {
   gameRunning = true;
   paused = false;
 
+  // Miss on misclick - set once here, not inside spawnCircle
+  document.getElementById("game").onclick = (e) => {
+    if (!e.target.classList.contains("circle") && gameRunning && !paused) {
+      miss++;
+      updateUI();
+    }
+  };
+
   updateUI();
   document.getElementById("time").textContent = timeLeft;
 
@@ -159,7 +167,6 @@ window.quitGame = function() {
   location.reload();
 }
 
-// ✅ FIX: fungsi saveScore yang tadinya tidak ada
 function saveScore(s) {
   let scores = JSON.parse(localStorage.getItem("scores")) || [];
   scores.push(s);
@@ -173,7 +180,7 @@ function endGame() {
   clearTimeout(spawnTimeout);
   clearTimeout(lifeTimeout);
 
-  saveScore(score); // ✅ sekarang tidak crash
+  saveScore(score);
 
   alert("Time's up! Score: " + score);
   location.reload();
