@@ -16,9 +16,9 @@ let lifeTimeout;
 let gameTimer;
 
 const settings = {
-  easy:   { size: 60, time: 1200, cooldown: 800, points: 100 },
-  medium: { size: 50, time: 900,  cooldown: 500, points: 150 },
-  hard:   { size: 40, time: 600,  cooldown: 300, points: 200 }
+  easy:   { size: 60, time: 1200, cooldown: 800,  points: 100 },
+  medium: { size: 50, time: 900,  cooldown: 500,  points: 150 },
+  hard:   { size: 40, time: 600,  cooldown: 300,  points: 200 }
 };
 
 window.showDifficulty = function() {
@@ -76,7 +76,6 @@ function gameLoop() {
 function spawnCircle() {
   const game = document.getElementById("game");
 
-  // ✅ ONLY remove inside game
   const oldCircle = game.querySelector(".circle");
   if (oldCircle) oldCircle.remove();
 
@@ -87,8 +86,9 @@ function spawnCircle() {
   circle.style.width = size + "px";
   circle.style.height = size + "px";
 
+  // Spawn within visible game area, below HUD (~60px)
   let x = Math.random() * (window.innerWidth - size);
-  let y = Math.random() * (window.innerHeight - size);
+  let y = 60 + Math.random() * (window.innerHeight - size - 60);
 
   circle.style.left = x + "px";
   circle.style.top = y + "px";
@@ -100,7 +100,6 @@ function spawnCircle() {
 
     if (!clicked) {
       clicked = true;
-
       hits++;
 
       clickSound.currentTime = 0;
@@ -110,17 +109,14 @@ function spawnCircle() {
       updateUI();
 
       circle.remove();
-
       clearTimeout(lifeTimeout);
 
-      // ✅ ALWAYS continue loop
       spawnTimeout = setTimeout(() => gameLoop(), settings[difficulty].cooldown);
     }
   };
 
   game.appendChild(circle);
 
-  // ⏱ lifetime
   lifeTimeout = setTimeout(() => {
     if (!clicked) {
       miss++;
@@ -128,7 +124,6 @@ function spawnCircle() {
       circle.remove();
     }
 
-    // ✅ ALWAYS continue loop (important fix)
     spawnTimeout = setTimeout(() => gameLoop(), settings[difficulty].cooldown);
 
   }, settings[difficulty].time);
@@ -164,6 +159,13 @@ window.quitGame = function() {
   location.reload();
 }
 
+// ✅ FIX: fungsi saveScore yang tadinya tidak ada
+function saveScore(s) {
+  let scores = JSON.parse(localStorage.getItem("scores")) || [];
+  scores.push(s);
+  localStorage.setItem("scores", JSON.stringify(scores));
+}
+
 function endGame() {
   gameRunning = false;
 
@@ -171,7 +173,7 @@ function endGame() {
   clearTimeout(spawnTimeout);
   clearTimeout(lifeTimeout);
 
-  saveScore(score);
+  saveScore(score); // ✅ sekarang tidak crash
 
   alert("Time's up! Score: " + score);
   location.reload();
@@ -179,13 +181,13 @@ function endGame() {
 
 function updateUI() {
   const scoreEl = document.getElementById("score");
-  const hitsEl = document.getElementById("hits");
-  const missEl = document.getElementById("miss");
-  const accEl = document.getElementById("accuracy");
+  const hitsEl  = document.getElementById("hits");
+  const missEl  = document.getElementById("miss");
+  const accEl   = document.getElementById("accuracy");
 
   if (scoreEl) scoreEl.textContent = score;
-  if (hitsEl) hitsEl.textContent = hits;
-  if (missEl) missEl.textContent = miss;
+  if (hitsEl)  hitsEl.textContent  = hits;
+  if (missEl)  missEl.textContent  = miss;
 
   let total = hits + miss;
   let acc = total === 0 ? 0 : Math.round((hits / total) * 100);
