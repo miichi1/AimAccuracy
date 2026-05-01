@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", () => {
+
 const clickSound = new Audio("click.mp3");
 clickSound.volume = 0.5;
 
@@ -9,7 +11,6 @@ let gameRunning = false;
 let paused = false;
 let difficulty = "easy";
 
-// ✅ separate timers
 let spawnTimeout;
 let lifeTimeout;
 let gameTimer;
@@ -20,12 +21,12 @@ const settings = {
   hard:   { size: 40, time: 600,  cooldown: 300, points: 200 }
 };
 
-function showDifficulty() {
+window.showDifficulty = function() {
   document.getElementById("menu").classList.add("hidden");
   document.getElementById("difficulty").classList.remove("hidden");
 }
 
-function showScoreboard() {
+window.showScoreboard = function() {
   document.getElementById("menu").classList.add("hidden");
   document.getElementById("scoreboard").classList.remove("hidden");
 
@@ -42,12 +43,12 @@ function showScoreboard() {
   });
 }
 
-function goMenu() {
+window.goMenu = function() {
   document.getElementById("scoreboard").classList.add("hidden");
   document.getElementById("menu").classList.remove("hidden");
 }
 
-function startGame(diff) {
+window.startGame = function(diff) {
   difficulty = diff;
 
   document.getElementById("difficulty").classList.add("hidden");
@@ -75,7 +76,6 @@ function gameLoop() {
 function spawnCircle() {
   const game = document.getElementById("game");
 
-  // remove old circle
   const oldCircle = document.querySelector(".circle");
   if (oldCircle) oldCircle.remove();
 
@@ -102,7 +102,6 @@ function spawnCircle() {
 
       hits++;
 
-      // 🔊 sound
       clickSound.currentTime = 0;
       clickSound.play().catch(() => {});
 
@@ -114,21 +113,18 @@ function spawnCircle() {
       clearTimeout(lifeTimeout);
       clearTimeout(spawnTimeout);
 
-      // next spawn after cooldown
       spawnTimeout = setTimeout(gameLoop, settings[difficulty].cooldown);
     }
   };
 
   game.appendChild(circle);
 
-  // ⏱ circle lifetime
   lifeTimeout = setTimeout(() => {
     if (!clicked) {
       miss++;
       updateUI();
       circle.remove();
 
-      // next spawn after cooldown
       spawnTimeout = setTimeout(gameLoop, settings[difficulty].cooldown);
     }
   }, settings[difficulty].time);
@@ -154,13 +150,13 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-function resumeGame() {
+window.resumeGame = function() {
   paused = false;
   document.getElementById("pauseMenu").classList.add("hidden");
   gameLoop();
 }
 
-function quitGame() {
+window.quitGame = function() {
   location.reload();
 }
 
@@ -193,3 +189,5 @@ function saveScore(s) {
   scores.push(s);
   localStorage.setItem("scores", JSON.stringify(scores));
 }
+
+});
