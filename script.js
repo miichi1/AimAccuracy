@@ -47,7 +47,8 @@ function gameLoop() {
 
 function spawnCircle() {
   const game = document.getElementById("game");
-  game.innerHTML = document.getElementById("hud").outerHTML;
+  const oldCircle = document.querySelector(".circle");
+if (oldCircle) oldCircle.remove();
 
   const circle = document.createElement("div");
   circle.classList.add("circle");
