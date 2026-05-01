@@ -2,7 +2,7 @@ const clickSound = new Audio("click.mp3");
 clickSound.volume = 0.5;
 
 let score = 0;
-let hits = 0;   // ✅ NEW
+let hits = 0;
 let miss = 0;
 let timeLeft = 30;
 let gameRunning = false;
@@ -52,7 +52,7 @@ function startGame(diff) {
   document.getElementById("game").classList.remove("hidden");
 
   score = 0;
-  hits = 0;   // ✅ reset
+  hits = 0;
   miss = 0;
   timeLeft = 30;
   gameRunning = true;
@@ -97,7 +97,7 @@ function spawnCircle() {
     if (!clicked) {
       clicked = true;
 
-      hits++; // ✅ COUNT HITS
+      hits++;
 
       clickSound.currentTime = 0;
       clickSound.play().catch(() => {});
@@ -114,6 +114,7 @@ function spawnCircle() {
 
   game.appendChild(circle);
 
+  // MISS only if not clicked in time
   circleTimeout = setTimeout(() => {
     if (!clicked) {
       miss++;
@@ -123,18 +124,6 @@ function spawnCircle() {
     }
   }, settings[difficulty].time);
 }
-
-document.getElementById("game").addEventListener("click", (e) => {
-  if (!gameRunning || paused) return;
-
-  if (!e.target.classList.contains("circle")) {
-    // ONLY count if NO circle exists
-    if (!document.querySelector(".circle")) {
-      miss++;
-      updateUI();
-    }
-  }
-});
 
 function startTimer() {
   gameTimer = setInterval(() => {
