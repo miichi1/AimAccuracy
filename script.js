@@ -63,11 +63,12 @@ window.startGame = function(diff) {
 
   // Miss on misclick - set once here, not inside spawnCircle
   document.getElementById("game").onclick = (e) => {
-    if (!e.target.classList.contains("circle") && gameRunning && !paused) {
-      miss++;
-      updateUI();
-    }
-  };
+  console.log("clicked:", e.target, "is circle:", e.target.classList.contains("circle"));
+  if (!e.target.classList.contains("circle") && gameRunning && !paused) {
+    miss++;
+    updateUI();
+  }
+};
 
   updateUI();
   document.getElementById("time").textContent = timeLeft;
