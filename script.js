@@ -178,20 +178,19 @@ function endGame() {
 }
 
 function updateUI() {
-  document.getElementById("score").textContent = score;
-  document.getElementById("hits").textContent = hits;
-  document.getElementById("miss").textContent = miss;
+  const scoreEl = document.getElementById("score");
+  const hitsEl = document.getElementById("hits");
+  const missEl = document.getElementById("miss");
+  const accEl = document.getElementById("accuracy");
+
+  if (scoreEl) scoreEl.textContent = score;
+  if (hitsEl) hitsEl.textContent = hits;
+  if (missEl) missEl.textContent = miss;
 
   let total = hits + miss;
   let acc = total === 0 ? 0 : Math.round((hits / total) * 100);
 
-  document.getElementById("accuracy").textContent = acc + "%";
-}
-
-function saveScore(s) {
-  let scores = JSON.parse(localStorage.getItem("scores")) || [];
-  scores.push(s);
-  localStorage.setItem("scores", JSON.stringify(scores));
+  if (accEl) accEl.textContent = acc + "%";
 }
 
 });
