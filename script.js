@@ -9,7 +9,9 @@ let gameRunning = false;
 let paused = false;
 let difficulty = "easy";
 
-let circleTimeout;
+// ✅ separate timers
+let spawnTimeout;
+let lifeTimeout;
 let gameTimer;
 
 const settings = {
@@ -73,6 +75,7 @@ function gameLoop() {
 function spawnCircle() {
   const game = document.getElementById("game");
 
+  // remove old circle
   const oldCircle = document.querySelector(".circle");
   if (oldCircle) oldCircle.remove();
 
@@ -99,6 +102,7 @@ function spawnCircle() {
 
       hits++;
 
+      // 🔊 sound
       clickSound.currentTime = 0;
       clickSound.play().catch(() => {});
 
@@ -107,20 +111,25 @@ function spawnCircle() {
 
       circle.remove();
 
-      clearTimeout(circleTimeout);
-      circleTimeout = setTimeout(gameLoop, settings[difficulty].cooldown);
+      clearTimeout(lifeTimeout);
+      clearTimeout(spawnTimeout);
+
+      // next spawn after cooldown
+      spawnTimeout = setTimeout(gameLoop, settings[difficulty].cooldown);
     }
   };
 
   game.appendChild(circle);
 
-  // MISS only if not clicked in time
-  circleTimeout = setTimeout(() => {
+  // ⏱ circle lifetime
+  lifeTimeout = setTimeout(() => {
     if (!clicked) {
       miss++;
       updateUI();
       circle.remove();
-      circleTimeout = setTimeout(gameLoop, settings[difficulty].cooldown);
+
+      // next spawn after cooldown
+      spawnTimeout = setTimeout(gameLoop, settings[difficulty].cooldown);
     }
   }, settings[difficulty].time);
 }
@@ -157,8 +166,10 @@ function quitGame() {
 
 function endGame() {
   gameRunning = false;
+
   clearInterval(gameTimer);
-  clearTimeout(circleTimeout);
+  clearTimeout(spawnTimeout);
+  clearTimeout(lifeTimeout);
 
   saveScore(score);
 
