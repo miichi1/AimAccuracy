@@ -158,3 +158,27 @@ function saveScore(s) {
   scores.push(s);
   localStorage.setItem("scores", JSON.stringify(scores));
 }
+
+function showScoreboard() {
+  document.getElementById("menu").classList.add("hidden");
+  document.getElementById("scoreboard").classList.remove("hidden");
+
+  let scores = JSON.parse(localStorage.getItem("scores")) || [];
+  let list = document.getElementById("scoreList");
+
+  list.innerHTML = "";
+
+  // sort highest score first
+  scores.sort((a, b) => b - a);
+
+  scores.forEach((s, index) => {
+    let li = document.createElement("li");
+    li.textContent = `#${index + 1} - ${s}`;
+    list.appendChild(li);
+  });
+}
+
+function goMenu() {
+  document.getElementById("scoreboard").classList.add("hidden");
+  document.getElementById("menu").classList.remove("hidden");
+}
