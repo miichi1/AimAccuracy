@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Circle Click Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- MAIN MENU -->
+<div id="menu" class="center">
+  <h1>Circle Click Game</h1>
+  <button onclick="showDifficulty()">Play</button>
+  <button onclick="showScoreboard()">Scoreboard</button>
+</div>
+
+<!-- DIFFICULTY -->
+<div id="difficulty" class="center hidden">
+  <h2>Select Difficulty</h2>
+  <button onclick="startGame('easy')">Easy</button>
+  <button onclick="startGame('medium')">Medium</button>
+  <button onclick="startGame('hard')">Hard</button>
+</div>
+
+<!-- GAME -->
+<div id="game" class="hidden">
+  <div id="hud">
+    <p>Score: <span id="score">0</span></p>
+    <p>Miss: <span id="miss">0</span></p>
+    <p>Accuracy: <span id="accuracy">0%</span></p>
+    <p>Time: <span id="time">30</span></p>
+  </div>
+</div>
+
+<!-- PAUSE MENU -->
+<div id="pauseMenu" class="center hidden">
+  <div class="box">
+    <h3>Paused</h3>
+    <button onclick="resumeGame()">Resume</button>
+    <button onclick="quitGame()">Quit</button>
+  </div>
+</div>
+
+</body>
+</html>
