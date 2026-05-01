@@ -6,25 +6,39 @@
 </head>
 <body>
 
-<div id="menu">
-  <h1>Circle Game</h1>
-  <button onclick="startGame()">Start</button>
+<!-- MAIN MENU -->
+<div id="menu" class="center">
+  <h1>Circle Click Game</h1>
+  <button onclick="showDifficulty()">Play</button>
   <button onclick="showScoreboard()">Scoreboard</button>
 </div>
 
+<!-- DIFFICULTY -->
+<div id="difficulty" class="center hidden">
+  <h2>Select Difficulty</h2>
+  <button onclick="startGame('easy')">Easy</button>
+  <button onclick="startGame('medium')">Medium</button>
+  <button onclick="startGame('hard')">Hard</button>
+</div>
+
+<!-- GAME -->
 <div id="game" class="hidden">
-  <p>Score: <span id="score">0</span></p>
-  <p>Miss: <span id="miss">0</span></p>
-  <p>Accuracy: <span id="accuracy">0%</span></p>
-  <div id="gameArea"></div>
+  <div id="hud">
+    <p>Score: <span id="score">0</span></p>
+    <p>Miss: <span id="miss">0</span></p>
+    <p>Accuracy: <span id="accuracy">0%</span></p>
+    <p>Time: <span id="time">30</span></p>
+  </div>
 </div>
 
-<div id="scoreboard" class="hidden">
-  <h2>Scoreboard</h2>
-  <ul id="scoreList"></ul>
-  <button onclick="goMenu()">Back</button>
+<!-- PAUSE MENU -->
+<div id="pauseMenu" class="center hidden">
+  <div class="box">
+    <h3>Paused</h3>
+    <button onclick="resumeGame()">Resume</button>
+    <button onclick="quitGame()">Quit</button>
+  </div>
 </div>
 
-<script src="script.js"></script>
 </body>
 </html>
