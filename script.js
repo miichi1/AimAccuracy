@@ -2,6 +2,7 @@ const clickSound = new Audio("click.mp3");
 clickSound.volume = 0.5;
 
 let score = 0;
+let hits = 0;   // ✅ NEW
 let miss = 0;
 let timeLeft = 30;
 let gameRunning = false;
@@ -51,6 +52,7 @@ function startGame(diff) {
   document.getElementById("game").classList.remove("hidden");
 
   score = 0;
+  hits = 0;   // ✅ reset
   miss = 0;
   timeLeft = 30;
   gameRunning = true;
@@ -95,7 +97,8 @@ function spawnCircle() {
     if (!clicked) {
       clicked = true;
 
-      // SOUND
+      hits++; // ✅ COUNT HITS
+
       clickSound.currentTime = 0;
       clickSound.play().catch(() => {});
 
@@ -141,7 +144,6 @@ function startTimer() {
   }, 1000);
 }
 
-// ESC pause
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && gameRunning) {
     paused = !paused;
@@ -174,10 +176,11 @@ function endGame() {
 
 function updateUI() {
   document.getElementById("score").textContent = score;
+  document.getElementById("hits").textContent = hits;
   document.getElementById("miss").textContent = miss;
 
-  let total = score + miss;
-  let acc = total === 0 ? 0 : Math.round((score / total) * 100);
+  let total = hits + miss;
+  let acc = total === 0 ? 0 : Math.round((hits / total) * 100);
 
   document.getElementById("accuracy").textContent = acc + "%";
 }
