@@ -1,4 +1,4 @@
-const clickSound = new Audio("Pop-Audio.mp3");
+const clickSound = new Audio("click.mp3");
 clickSound.volume = 0.5; // optional (0.0 - 1.0)
 let score = 0;
 let miss = 0;
@@ -73,7 +73,6 @@ function spawnCircle() {
     clicked = true;
 
     // 🔊 PLAY SOUND
-    clickSound.currentTime = 0;
     clickSound.currentTime = 0;
     clickSound.play().catch(err => console.log("Sound blocked:", err));
 
@@ -193,3 +192,8 @@ function goMenu() {
   document.getElementById("scoreboard").classList.add("hidden");
   document.getElementById("menu").classList.remove("hidden");
 }
+
+clickSound.currentTime = 0;
+clickSound.play()
+  .then(() => console.log("SOUND WORKS"))
+  .catch(err => console.log("SOUND ERROR:", err));
