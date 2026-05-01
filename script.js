@@ -1,3 +1,5 @@
+const clickSound = new Audio("Pop-Audio.mp3");
+clickSound.volume = 0.5; // optional (0.0 - 1.0)
 let score = 0;
 let miss = 0;
 let timeLeft = 30;
@@ -9,9 +11,9 @@ let circleTimeout;
 let gameTimer;
 
 const settings = {
-  easy:   { size: 60, time: 1200, points: 100 },
-  medium: { size: 50, time: 900,  points: 150 },
-  hard:   { size: 40, time: 600,  points: 200 }
+  easy:   { size: 60, time: 1200, cooldown: 800, points: 100 },
+  medium: { size: 50, time: 900,  cooldown: 500, points: 150 },
+  hard:   { size: 40, time: 600,  cooldown: 300, points: 200 }
 };
 
 function showDifficulty() {
@@ -40,9 +42,7 @@ function startGame(diff) {
 
 function gameLoop() {
   if (!gameRunning || paused) return;
-
   spawnCircle();
-  circleTimeout = setTimeout(gameLoop, settings[difficulty].time);
 }
 
 function spawnCircle() {
@@ -67,22 +67,36 @@ function spawnCircle() {
   let clicked = false;
 
   circle.onclick = (e) => {
-    e.stopPropagation(); // VERY IMPORTANT (prevents fake miss)
-    if (!clicked) {
-      score += settings[difficulty].points;
-      clicked = true;
-      updateUI();
-      circle.remove();
-    }
-  };
+  e.stopPropagation();
+
+  if (!clicked) {
+    clicked = true;
+
+    // 🔊 PLAY SOUND
+    clickSound.currentTime = 0;
+    clickSound.play();
+
+    score += settings[difficulty].points;
+    updateUI();
+
+    circle.remove();
+
+    clearTimeout(circleTimeout);
+    circleTimeout = setTimeout(gameLoop, settings[difficulty].cooldown);
+  }
+};
 
   game.appendChild(circle);
 
-  setTimeout(() => {
+  // auto disappear
+  circleTimeout = setTimeout(() => {
     if (!clicked) {
       miss++;
       updateUI();
       circle.remove();
+
+      // ⏳ cooldown before next circle
+      circleTimeout = setTimeout(gameLoop, settings[difficulty].cooldown);
     }
   }, settings[difficulty].time);
 }
