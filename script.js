@@ -19,10 +19,6 @@ function showDifficulty() {
   document.getElementById("difficulty").classList.remove("hidden");
 }
 
-function showScoreboard() {
-  alert("Scoreboard not implemented yet");
-}
-
 function startGame(diff) {
   difficulty = diff;
 
