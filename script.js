@@ -84,7 +84,7 @@ if (oldCircle) oldCircle.remove();
 }
 
 // miss click
-document.addEventListener("click", (e) => {
+document.getElementById("game").addEventListener("click", (e) => {
   if (!gameRunning || paused) return;
   if (!e.target.classList.contains("circle")) {
     miss++;
@@ -151,4 +151,7 @@ function saveScore(s) {
   let scores = JSON.parse(localStorage.getItem("scores")) || [];
   scores.push(s);
   localStorage.setItem("scores", JSON.stringify(scores));
+}
+function showScoreboard() {
+  alert("Scoreboard not implemented yet");
 }
