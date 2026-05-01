@@ -8,7 +8,6 @@ let difficulty = "easy";
 let circleTimeout;
 let gameTimer;
 
-// difficulty settings
 const settings = {
   easy:   { size: 60, time: 1200, points: 100 },
   medium: { size: 50, time: 900,  points: 150 },
@@ -18,6 +17,10 @@ const settings = {
 function showDifficulty() {
   document.getElementById("menu").classList.add("hidden");
   document.getElementById("difficulty").classList.remove("hidden");
+}
+
+function showScoreboard() {
+  alert("Scoreboard not implemented yet");
 }
 
 function startGame(diff) {
@@ -30,8 +33,10 @@ function startGame(diff) {
   miss = 0;
   timeLeft = 30;
   gameRunning = true;
+  paused = false;
 
   updateUI();
+  document.getElementById("time").textContent = timeLeft;
 
   gameLoop();
   startTimer();
@@ -41,14 +46,14 @@ function gameLoop() {
   if (!gameRunning || paused) return;
 
   spawnCircle();
-
   circleTimeout = setTimeout(gameLoop, settings[difficulty].time);
 }
 
 function spawnCircle() {
   const game = document.getElementById("game");
+
   const oldCircle = document.querySelector(".circle");
-if (oldCircle) oldCircle.remove();
+  if (oldCircle) oldCircle.remove();
 
   const circle = document.createElement("div");
   circle.classList.add("circle");
@@ -65,25 +70,28 @@ if (oldCircle) oldCircle.remove();
 
   let clicked = false;
 
-  circle.onclick = () => {
+  circle.onclick = (e) => {
+    e.stopPropagation(); // VERY IMPORTANT (prevents fake miss)
     if (!clicked) {
       score += settings[difficulty].points;
       clicked = true;
       updateUI();
+      circle.remove();
     }
   };
 
   game.appendChild(circle);
 
-  // disappear
   setTimeout(() => {
-    if (!clicked) miss++;
-    updateUI();
-    circle.remove();
+    if (!clicked) {
+      miss++;
+      updateUI();
+      circle.remove();
+    }
   }, settings[difficulty].time);
 }
 
-// miss click
+// ONLY track clicks inside game
 document.getElementById("game").addEventListener("click", (e) => {
   if (!gameRunning || paused) return;
   if (!e.target.classList.contains("circle")) {
@@ -92,7 +100,6 @@ document.getElementById("game").addEventListener("click", (e) => {
   }
 });
 
-// timer
 function startTimer() {
   gameTimer = setInterval(() => {
     if (!paused) {
@@ -104,7 +111,7 @@ function startTimer() {
   }, 1000);
 }
 
-// pause with ESC
+// ESC = pause
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && gameRunning) {
     paused = !paused;
@@ -146,12 +153,8 @@ function updateUI() {
   document.getElementById("accuracy").textContent = acc + "%";
 }
 
-// save scoreboard
 function saveScore(s) {
   let scores = JSON.parse(localStorage.getItem("scores")) || [];
   scores.push(s);
   localStorage.setItem("scores", JSON.stringify(scores));
-}
-function showScoreboard() {
-  alert("Scoreboard not implemented yet");
 }
