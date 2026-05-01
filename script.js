@@ -1,5 +1,6 @@
 const clickSound = new Audio("click.mp3");
-clickSound.volume = 0.5; // optional (0.0 - 1.0)
+clickSound.volume = 0.5;
+
 let score = 0;
 let miss = 0;
 let timeLeft = 30;
@@ -19,6 +20,28 @@ const settings = {
 function showDifficulty() {
   document.getElementById("menu").classList.add("hidden");
   document.getElementById("difficulty").classList.remove("hidden");
+}
+
+function showScoreboard() {
+  document.getElementById("menu").classList.add("hidden");
+  document.getElementById("scoreboard").classList.remove("hidden");
+
+  let scores = JSON.parse(localStorage.getItem("scores")) || [];
+  let list = document.getElementById("scoreList");
+
+  list.innerHTML = "";
+  scores.sort((a, b) => b - a);
+
+  scores.forEach((s, i) => {
+    let li = document.createElement("li");
+    li.textContent = `#${i + 1} - ${s}`;
+    list.appendChild(li);
+  });
+}
+
+function goMenu() {
+  document.getElementById("scoreboard").classList.add("hidden");
+  document.getElementById("menu").classList.remove("hidden");
 }
 
 function startGame(diff) {
@@ -67,41 +90,38 @@ function spawnCircle() {
   let clicked = false;
 
   circle.onclick = (e) => {
-  e.stopPropagation();
+    e.stopPropagation();
 
-  if (!clicked) {
-    clicked = true;
+    if (!clicked) {
+      clicked = true;
 
-    // 🔊 PLAY SOUND
-    clickSound.currentTime = 0;
-    clickSound.play().catch(err => console.log("Sound blocked:", err));
+      // SOUND
+      clickSound.currentTime = 0;
+      clickSound.play().catch(() => {});
 
-    score += settings[difficulty].points;
-    updateUI();
+      score += settings[difficulty].points;
+      updateUI();
 
-    circle.remove();
+      circle.remove();
 
-    clearTimeout(circleTimeout);
-    circleTimeout = setTimeout(gameLoop, settings[difficulty].cooldown);
-  }
-};
+      clearTimeout(circleTimeout);
+      circleTimeout = setTimeout(gameLoop, settings[difficulty].cooldown);
+    }
+  };
 
   game.appendChild(circle);
 
-  // auto disappear
   circleTimeout = setTimeout(() => {
     if (!clicked) {
       miss++;
       updateUI();
       circle.remove();
-
-      // ⏳ cooldown before next circle
       circleTimeout = setTimeout(gameLoop, settings[difficulty].cooldown);
     }
   }, settings[difficulty].time);
 }
 
-// ONLY track clicks inside game
+// miss click
 document.getElementById("game").addEventListener("click", (e) => {
   if (!gameRunning || paused) return;
   if (!e.target.classList.contains("circle")) {
@@ -121,11 +141,10 @@ function startTimer() {
   }, 1000);
 }
 
-// ESC = pause
+// ESC pause
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && gameRunning) {
     paused = !paused;
-
     document.getElementById("pauseMenu").classList.toggle("hidden");
 
     if (!paused) gameLoop();
@@ -168,32 +187,3 @@ function saveScore(s) {
   scores.push(s);
   localStorage.setItem("scores", JSON.stringify(scores));
 }
-
-function showScoreboard() {
-  document.getElementById("menu").classList.add("hidden");
-  document.getElementById("scoreboard").classList.remove("hidden");
-
-  let scores = JSON.parse(localStorage.getItem("scores")) || [];
-  let list = document.getElementById("scoreList");
-
-  list.innerHTML = "";
-
-  // sort highest score first
-  scores.sort((a, b) => b - a);
-
-  scores.forEach((s, index) => {
-    let li = document.createElement("li");
-    li.textContent = `#${index + 1} - ${s}`;
-    list.appendChild(li);
-  });
-}
-
-function goMenu() {
-  document.getElementById("scoreboard").classList.add("hidden");
-  document.getElementById("menu").classList.remove("hidden");
-}
-
-clickSound.currentTime = 0;
-clickSound.play()
-  .then(() => console.log("SOUND WORKS"))
-  .catch(err => console.log("SOUND ERROR:", err));
