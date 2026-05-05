@@ -38,6 +38,7 @@ button {
   color: rgba(100,100,100,0.85);
   user-select: none;
   -webkit-user-select: none;
+  pointer-events: none;
 }
 
 .circle {
