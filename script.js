@@ -96,7 +96,7 @@ function spawnCircle() {
 
   // Spawn within visible game area, below HUD (~60px)
   let x = Math.random() * (window.innerWidth - size);
-  let y = Math.random() * (window.innerHeight - size - 60);
+  let y = Math.random() * (window.innerHeight - size);
 
   circle.style.left = x + "px";
   circle.style.top = y + "px";

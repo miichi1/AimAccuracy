@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Circle Click Game</title>
+  <title>Aim Accuracy</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- MENU -->
 <div id="menu" class="center">
-  <h1>Circle Click Game</h1>
+  <h1>Aim Accuracy</h1>
   <button onclick="showDifficulty()">Play</button>
   <button onclick="showScoreboard()">Scoreboard</button>
 </div>
 
-<!-- DIFFICULTY -->
 <div id="difficulty" class="center hidden">
   <h2>Select Difficulty</h2>
   <button onclick="startGame('easy')">Easy</button>
@@ -21,7 +19,6 @@
   <button onclick="startGame('hard')">Hard</button>
 </div>
 
-<!-- GAME -->
 <div id="game" class="hidden">
   <div id="hud">
   <p>Score: <span id="score">0</span></p>
@@ -32,7 +29,6 @@
 </div>
 </div>
 
-<!-- PAUSE -->
 <div id="pauseMenu" class="center hidden">
   <div class="box">
     <h3>Paused</h3>
@@ -41,7 +37,6 @@
   </div>
 </div>
 
-<!-- SCOREBOARD -->
 <div id="scoreboard" class="center hidden">
   <h2>Scoreboard</h2>
   <ul id="scoreList"></ul>
