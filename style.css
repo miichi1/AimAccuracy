@@ -36,7 +36,8 @@ button {
   top: 10px;
   left: 10px;
   color: rgba(100,100,100,0.85);
-  user-select: none;  
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .circle {
@@ -44,6 +45,8 @@ button {
   border-radius: 50%;
   background: red;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .box {
