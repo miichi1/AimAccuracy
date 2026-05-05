@@ -61,7 +61,6 @@ window.startGame = function(diff) {
   gameRunning = true;
   paused = false;
 
-  // Miss on misclick - set once here, not inside spawnCircle
   document.getElementById("game").onclick = (e) => {
   console.log("clicked:", e.target, "is circle:", e.target.classList.contains("circle"));
   if (!e.target.classList.contains("circle") && gameRunning && !paused) {
@@ -97,7 +96,7 @@ function spawnCircle() {
 
   // Spawn within visible game area, below HUD (~60px)
   let x = Math.random() * (window.innerWidth - size);
-  let y = 60 + Math.random() * (window.innerHeight - size - 60);
+  let y = Math.random() * (window.innerHeight - size - 60);
 
   circle.style.left = x + "px";
   circle.style.top = y + "px";
