@@ -41,6 +41,10 @@ button {
   pointer-events: none;
 }
 
+#hud p {
+  margin: 4px 0;
+}
+
 .circle {
   position: absolute;
   border-radius: 50%;
