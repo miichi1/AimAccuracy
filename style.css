@@ -39,12 +39,10 @@ button {
   user-select: none;
   -webkit-user-select: none;
   pointer-events: none;
-  display: flex;
-  gap: 20px;
 }
 
 #hud p {
-  margin: 0;
+  margin: 4px 0;
 }
 
 .circle {
